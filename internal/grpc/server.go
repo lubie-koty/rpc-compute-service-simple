@@ -4,20 +4,20 @@ import (
 	"log/slog"
 )
 
-type GRpcServer struct {
+type GRPCServer struct {
 	Address string
 	Logger  *slog.Logger
 	Service *GRPCService
 }
 
-func NewGRPCServer(address string, logger *slog.Logger, service *GRPCService) *GRpcServer {
-	return &GRpcServer{
+func NewGRPCServer(address string, logger *slog.Logger, service *GRPCService) *GRPCServer {
+	return &GRPCServer{
 		Address: address,
 		Logger:  logger,
 		Service: service,
 	}
 }
 
-func (s *GRpcServer) Serve() error {
+func (s *GRPCServer) Serve() error {
 	return nil
 }

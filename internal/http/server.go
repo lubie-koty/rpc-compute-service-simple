@@ -6,21 +6,21 @@ import (
 	"net/http"
 )
 
-type HttpServer struct {
+type HTTPServer struct {
 	Address string
 	Logger  *slog.Logger
-	*HttpService
+	*HTTPService
 }
 
-func NewHttpServer(address string, logger *slog.Logger, httpService *HttpService) *HttpServer {
-	return &HttpServer{
+func NewHTTPServer(address string, logger *slog.Logger, httpService *HTTPService) *HTTPServer {
+	return &HTTPServer{
 		Address:     address,
 		Logger:      logger,
-		HttpService: httpService,
+		HTTPService: httpService,
 	}
 }
 
-func NewHttpHandler(httpService *HttpService) http.Handler {
+func NewHTTPHandler(httpService *HTTPService) http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/add", httpService.Add)
 	mux.HandleFunc("/sub", httpService.Sub)
@@ -29,10 +29,10 @@ func NewHttpHandler(httpService *HttpService) http.Handler {
 	return mux
 }
 
-func (s *HttpServer) Serve() error {
+func (s *HTTPServer) Serve() error {
 	server := &http.Server{
 		Addr:    s.Address,
-		Handler: NewHttpHandler(s.HttpService),
+		Handler: NewHTTPHandler(s.HTTPService),
 	}
 
 	s.Logger.Info("HTTP server starting", "server address", server.Addr)

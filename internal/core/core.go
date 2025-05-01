@@ -22,7 +22,7 @@ func NewApp(address string, logger *slog.Logger) *App {
 	case "grpc":
 		server = grpc.NewGRPCServer(address, logger, grpc.NewGRPCService(baseService))
 	case "rest":
-		server = http.NewHttpServer(address, logger, http.NewHttpService(baseService))
+		server = http.NewHTTPServer(address, logger, http.NewHTTPService(baseService))
 	default:
 		panic("unsupported app mode")
 	}
