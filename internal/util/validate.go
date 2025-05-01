@@ -1,4 +1,4 @@
-package validate
+package util
 
 import (
 	"strconv"
@@ -30,4 +30,12 @@ func ValidateHost(hostValue string) (string, error) {
 		return "", err
 	}
 	return hostValue, nil
+}
+
+func ValidateAppMode(appModeValue string) (string, error) {
+	err := Validate.Var(appModeValue, "required,oneof=grpc rest")
+	if err != nil {
+		return "", err
+	}
+	return appModeValue, nil
 }

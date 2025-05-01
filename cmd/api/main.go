@@ -5,44 +5,36 @@ import (
 	"log/slog"
 	"os"
 	"runtime/debug"
-	"sync"
 
 	"github.com/joho/godotenv"
 	"github.com/lubie-koty/rpc-compute-service-simple/internal/config"
-	"github.com/lubie-koty/rpc-compute-service-simple/internal/validate"
+	"github.com/lubie-koty/rpc-compute-service-simple/internal/core"
+	"github.com/lubie-koty/rpc-compute-service-simple/internal/util"
 )
 
 func main() {
-	validate.InitValidate()
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	util.InitValidate()
 	envVars, err := godotenv.Read()
 	if err != nil {
-		fmt.Println("Error loading .env file:", err)
+		logger.Error("error loading .env file:", "error", err.Error())
 		os.Exit(1)
 	}
 	err = config.InitConfig(envVars)
 	if err != nil {
-		fmt.Println("Error initializing config:", err)
+		logger.Error("error initializing config:", "error", err.Error())
 		os.Exit(1)
 	}
 
-	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
-	err = runApplication(logger)
+	err = runApplication(fmt.Sprintf("%s:%d", config.AppConfig.Host, config.AppConfig.Port), logger)
 	if err != nil {
 		trace := string(debug.Stack())
-		logger.Error(err.Error(), "trace", trace)
+		logger.Error("error running application", "error", err.Error(), "trace", trace)
 		os.Exit(1)
 	}
 }
 
-type application struct {
-	logger *slog.Logger
-	wg     sync.WaitGroup
-}
-
-func runApplication(logger *slog.Logger) error {
-	app := &application{
-		logger: logger,
-	}
-
-	return app.serveHTTP()
+func runApplication(address string, logger *slog.Logger) error {
+	app := core.NewApp(address, logger)
+	return app.Run()
 }

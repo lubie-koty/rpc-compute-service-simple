@@ -1,7 +1,23 @@
 package grpc
 
-import "github.com/lubie-koty/rpc-compute-service-simple/internal/core"
+import (
+	"log/slog"
+)
 
 type GRpcServer struct {
-	core.Server
+	Address string
+	Logger  *slog.Logger
+	Service *GRPCService
+}
+
+func NewGRPCServer(address string, logger *slog.Logger, service *GRPCService) *GRpcServer {
+	return &GRpcServer{
+		Address: address,
+		Logger:  logger,
+		Service: service,
+	}
+}
+
+func (s *GRpcServer) Serve() error {
+	return nil
 }

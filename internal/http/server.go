@@ -1,25 +1,26 @@
 package http
 
 import (
-	"fmt"
+	"errors"
+	"log/slog"
 	"net/http"
-
-	"github.com/lubie-koty/rpc-compute-service-simple/internal/core"
 )
 
 type HttpServer struct {
-	core.Server
-	HttpService
+	Address string
+	Logger  *slog.Logger
+	*HttpService
 }
 
-func NewHttpServer(server core.Server, httpService HttpService) *HttpServer {
+func NewHttpServer(address string, logger *slog.Logger, httpService *HttpService) *HttpServer {
 	return &HttpServer{
-		Server:      server,
+		Address:     address,
+		Logger:      logger,
 		HttpService: httpService,
 	}
 }
 
-func NewHttpHandler(httpService HttpService) http.Handler {
+func NewHttpHandler(httpService *HttpService) http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/add", httpService.Add)
 	mux.HandleFunc("/sub", httpService.Sub)
@@ -30,16 +31,15 @@ func NewHttpHandler(httpService HttpService) http.Handler {
 
 func (s *HttpServer) Serve() error {
 	server := &http.Server{
-		Addr:    fmt.Sprintf("%s:%d", s.Server.Host, s.Server.Port),
+		Addr:    s.Address,
 		Handler: NewHttpHandler(s.HttpService),
 	}
 
-	s.Server.Logger.Info("HTTP server starting", server.Addr)
+	s.Logger.Info("HTTP server starting", "server address", server.Addr)
 	err := server.ListenAndServe()
-	if err != nil {
+	if !errors.Is(err, http.ErrServerClosed) {
 		return err
 	}
-
-	s.Server.Logger.Info("HTTP server stopped", server.Addr)
+	s.Logger.Info("HTTP server stopped", "server address", server.Addr)
 	return nil
 }

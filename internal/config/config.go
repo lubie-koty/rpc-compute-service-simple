@@ -1,28 +1,34 @@
 package config
 
 import (
-	"github.com/lubie-koty/rpc-compute-service-simple/internal/validate"
+	"github.com/lubie-koty/rpc-compute-service-simple/internal/util"
 )
 
 type Config struct {
-	Host string
-	Port int
+	Host    string
+	Port    int
+	AppMode string
 }
 
 var AppConfig Config
 
 func InitConfig(envVars map[string]string) error {
-	portValue, err := validate.ValidatePort(envVars["PORT"])
+	portValue, err := util.ValidatePort(envVars["PORT"])
 	if err != nil {
 		return err
 	}
-	hostValue, err := validate.ValidateHost(envVars["HOST"])
+	hostValue, err := util.ValidateHost(envVars["HOST"])
+	if err != nil {
+		return err
+	}
+	appModeValue, err := util.ValidateAppMode(envVars["APP_MODE"])
 	if err != nil {
 		return err
 	}
 	AppConfig = Config{
-		Host: hostValue,
-		Port: portValue,
+		Host:    hostValue,
+		Port:    portValue,
+		AppMode: appModeValue,
 	}
 	return nil
 }

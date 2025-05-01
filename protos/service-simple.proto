@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "github.com/lubie-koty/rpc-compute-service-simple/protos";
+
+service SimpleCompute {
+  rpc Add (OperationRequest) returns (OperationResponse) {}
+  rpc Sub (OperationRequest) returns (OperationResponse) {}
+  rpc Mul (OperationRequest) returns (OperationResponse) {}
+  rpc Div (OperationRequest) returns (OperationResponse) {}
+}
+
+message OperationRequest {
+    sint32 first_number = 1;
+    sint32 second_number = 2;
+}
+
+message OperationResponse {
+    sint32 result = 1;
+}
