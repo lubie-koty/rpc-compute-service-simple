@@ -25,7 +25,7 @@ func ValidatePort(portValue string) (int, error) {
 }
 
 func ValidateHost(hostValue string) (string, error) {
-	err := Validate.Var(hostValue, "required,url")
+	err := Validate.Var(hostValue, "required")
 	if err != nil {
 		return "", err
 	}

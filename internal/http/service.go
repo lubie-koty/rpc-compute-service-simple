@@ -18,12 +18,12 @@ func NewHTTPService(service types.MathService) *HTTPService {
 }
 
 type OperationRequest struct {
-	FirstNumber  int32 `json:"first_number" validate:"required"`
-	SecondNumber int32 `json:"second_number" validate:"required"`
+	FirstNumber  float32 `json:"first_number" validate:"required"`
+	SecondNumber float32 `json:"second_number" validate:"required"`
 }
 
 type OperationResponse struct {
-	Result int32 `json:"result"`
+	Result float32 `json:"result"`
 }
 
 func (h *HTTPService) Add(w http.ResponseWriter, r *http.Request) {

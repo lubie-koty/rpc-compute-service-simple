@@ -35,7 +35,7 @@ func (s *HTTPServer) Serve() error {
 		Handler: NewHTTPHandler(s.HTTPService),
 	}
 
-	s.Logger.Info("HTTP server starting", "server address", server.Addr)
+	s.Logger.Info("HTTP server started", "server address", server.Addr)
 	err := server.ListenAndServe()
 	if !errors.Is(err, http.ErrServerClosed) {
 		return err
