@@ -1,6 +1,7 @@
 package core
 
 import (
+	"context"
 	"log/slog"
 
 	"github.com/lubie-koty/rpc-compute-service-simple/internal/base"
@@ -14,15 +15,15 @@ type App struct {
 	Server types.Server
 }
 
-func NewApp(address string, logger *slog.Logger) *App {
+func NewApp(ctx *context.Context, logger *slog.Logger, address string) *App {
 	var server types.Server
 	appMode := config.AppConfig.AppMode
 	baseService := base.NewSimpleMathService()
 	switch appMode {
 	case "grpc":
-		server = grpc.NewGRPCServer(address, logger, grpc.NewGRPCService(baseService))
+		server = grpc.NewGRPCServer(ctx, logger, grpc.NewGRPCService(baseService), address)
 	case "rest":
-		server = http.NewHTTPServer(address, logger, http.NewHTTPService(baseService))
+		server = http.NewHTTPServer(ctx, logger, http.NewHTTPService(baseService), address)
 	default:
 		panic("unsupported app mode")
 	}

@@ -1,21 +1,25 @@
 package http
 
 import (
-	"errors"
+	"context"
 	"log/slog"
 	"net/http"
+
+	"golang.org/x/sync/errgroup"
 )
 
 type HTTPServer struct {
 	Address string
 	Logger  *slog.Logger
+	Context *context.Context
 	*HTTPService
 }
 
-func NewHTTPServer(address string, logger *slog.Logger, httpService *HTTPService) *HTTPServer {
+func NewHTTPServer(ctx *context.Context, logger *slog.Logger, httpService *HTTPService, address string) *HTTPServer {
 	return &HTTPServer{
 		Address:     address,
 		Logger:      logger,
+		Context:     ctx,
 		HTTPService: httpService,
 	}
 }
@@ -36,10 +40,18 @@ func (s *HTTPServer) Serve() error {
 	}
 
 	s.Logger.Info("HTTP server started", "server address", server.Addr)
-	err := server.ListenAndServe()
-	if !errors.Is(err, http.ErrServerClosed) {
+	g, gCtx := errgroup.WithContext(*s.Context)
+	g.Go(func() error {
+		return server.ListenAndServe()
+	})
+	g.Go(func() error {
+		<-gCtx.Done()
+		s.Logger.Info("HTTP server stopped")
+		return server.Shutdown(context.Background())
+	})
+
+	if err := g.Wait(); err != nil {
 		return err
 	}
-	s.Logger.Info("HTTP server stopped", "server address", server.Addr)
 	return nil
 }

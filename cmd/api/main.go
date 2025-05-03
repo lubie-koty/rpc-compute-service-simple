@@ -1,10 +1,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"os"
+	"os/signal"
 	"runtime/debug"
+	"syscall"
 
 	"github.com/joho/godotenv"
 	"github.com/lubie-koty/rpc-compute-service-simple/internal/config"
@@ -35,6 +38,16 @@ func main() {
 }
 
 func runApplication(address string, logger *slog.Logger) error {
-	app := core.NewApp(address, logger)
+	ctx, cancel := context.WithCancel(context.Background())
+
+	go func() {
+		c := make(chan os.Signal, 1)
+		signal.Notify(c, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+
+		<-c
+		cancel()
+	}()
+
+	app := core.NewApp(&ctx, logger, address)
 	return app.Run()
 }
