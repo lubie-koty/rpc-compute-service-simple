@@ -10,10 +10,10 @@ service SimpleCompute {
 }
 
 message OperationRequest {
-    float first_number = 1;
-    float second_number = 2;
+    double first_number = 1;
+    double second_number = 2;
 }
 
 message OperationResponse {
-    float result = 1;
+    double result = 1;
 }
