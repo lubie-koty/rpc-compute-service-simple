@@ -23,8 +23,7 @@ const (
 
 type OperationRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FirstNumber   float64                `protobuf:"fixed64,1,opt,name=first_number,json=firstNumber,proto3" json:"first_number,omitempty"`
-	SecondNumber  float64                `protobuf:"fixed64,2,opt,name=second_number,json=secondNumber,proto3" json:"second_number,omitempty"`
+	Numbers       []float64              `protobuf:"fixed64,1,rep,packed,name=numbers,proto3" json:"numbers,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,18 +58,11 @@ func (*OperationRequest) Descriptor() ([]byte, []int) {
 	return file_protos_service_simple_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *OperationRequest) GetFirstNumber() float64 {
+func (x *OperationRequest) GetNumbers() []float64 {
 	if x != nil {
-		return x.FirstNumber
+		return x.Numbers
 	}
-	return 0
-}
-
-func (x *OperationRequest) GetSecondNumber() float64 {
-	if x != nil {
-		return x.SecondNumber
-	}
-	return 0
+	return nil
 }
 
 type OperationResponse struct {
@@ -121,10 +113,9 @@ var File_protos_service_simple_proto protoreflect.FileDescriptor
 
 const file_protos_service_simple_proto_rawDesc = "" +
 	"\n" +
-	"\x1bprotos/service-simple.proto\x12\x06simple\"Z\n" +
-	"\x10OperationRequest\x12!\n" +
-	"\ffirst_number\x18\x01 \x01(\x01R\vfirstNumber\x12#\n" +
-	"\rsecond_number\x18\x02 \x01(\x01R\fsecondNumber\"+\n" +
+	"\x1bprotos/service-simple.proto\x12\x06simple\",\n" +
+	"\x10OperationRequest\x12\x18\n" +
+	"\anumbers\x18\x01 \x03(\x01R\anumbers\"+\n" +
 	"\x11OperationResponse\x12\x16\n" +
 	"\x06result\x18\x01 \x01(\x01R\x06result2\x87\x02\n" +
 	"\rSimpleCompute\x12<\n" +

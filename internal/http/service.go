@@ -18,8 +18,7 @@ func NewHTTPService(service types.MathService) *HTTPService {
 }
 
 type OperationRequest struct {
-	FirstNumber  float64 `json:"first_number" validate:"required"`
-	SecondNumber float64 `json:"second_number" validate:"required"`
+	Numbers []float64 `json:"numbers" validate:"required"`
 }
 
 type OperationResponse struct {
@@ -32,7 +31,7 @@ func (h *HTTPService) Add(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	result := h.service.Add(body.FirstNumber, body.SecondNumber)
+	result := h.service.Add(body.Numbers)
 	util.WriteResponse(w, OperationResponse{Result: result})
 }
 
@@ -42,7 +41,7 @@ func (h *HTTPService) Sub(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	result := h.service.Sub(body.FirstNumber, body.SecondNumber)
+	result := h.service.Sub(body.Numbers)
 	util.WriteResponse(w, OperationResponse{Result: result})
 }
 
@@ -52,7 +51,7 @@ func (h *HTTPService) Mul(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	result := h.service.Mul(body.FirstNumber, body.SecondNumber)
+	result := h.service.Mul(body.Numbers)
 	util.WriteResponse(w, OperationResponse{Result: result})
 }
 
@@ -62,6 +61,6 @@ func (h *HTTPService) Div(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	result := h.service.Div(body.FirstNumber, body.SecondNumber)
+	result := h.service.Div(body.Numbers)
 	util.WriteResponse(w, OperationResponse{Result: result})
 }

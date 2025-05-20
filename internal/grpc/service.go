@@ -19,21 +19,21 @@ func NewGRPCService(service types.MathService) *GRPCService {
 }
 
 func (h *GRPCService) Add(ctx context.Context, request *pb.OperationRequest) (*pb.OperationResponse, error) {
-	result := h.service.Add(request.GetFirstNumber(), request.GetSecondNumber())
+	result := h.service.Add(request.GetNumbers())
 	return &pb.OperationResponse{Result: result}, nil
 }
 
 func (h *GRPCService) Sub(ctx context.Context, request *pb.OperationRequest) (*pb.OperationResponse, error) {
-	result := h.service.Sub(request.GetFirstNumber(), request.GetSecondNumber())
+	result := h.service.Sub(request.GetNumbers())
 	return &pb.OperationResponse{Result: result}, nil
 }
 
 func (h *GRPCService) Mul(ctx context.Context, request *pb.OperationRequest) (*pb.OperationResponse, error) {
-	result := h.service.Mul(request.GetFirstNumber(), request.GetSecondNumber())
+	result := h.service.Mul(request.GetNumbers())
 	return &pb.OperationResponse{Result: result}, nil
 }
 
 func (h *GRPCService) Div(ctx context.Context, request *pb.OperationRequest) (*pb.OperationResponse, error) {
-	result := h.service.Div(request.GetFirstNumber(), request.GetSecondNumber())
+	result := h.service.Div(request.GetNumbers())
 	return &pb.OperationResponse{Result: result}, nil
 }

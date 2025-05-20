@@ -5,8 +5,8 @@ type Server interface {
 }
 
 type MathService interface {
-	Add(a, b float64) float64
-	Sub(a, b float64) float64
-	Mul(a, b float64) float64
-	Div(a, b float64) float64
+	Add(numbers []float64) float64
+	Sub(numbers []float64) float64
+	Mul(numbers []float64) float64
+	Div(numbers []float64) float64
 }

@@ -10,8 +10,7 @@ service SimpleCompute {
 }
 
 message OperationRequest {
-    double first_number = 1;
-    double second_number = 2;
+    repeated double numbers = 1;
 }
 
 message OperationResponse {
